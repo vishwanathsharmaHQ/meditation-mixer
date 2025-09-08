@@ -79,9 +79,10 @@ class MeditationAudioMixer {
     async setupWebAudioAPI() {
         const trackNames = ['breath', 'music', 'percussion', 'voice'];
         
+        // Create separate audio contexts for each track to avoid conflicts
         for (const track of trackNames) {
             try {
-                // Create audio context
+                // Create individual audio context for each track
                 this.audioContexts[track] = new (window.AudioContext || window.webkitAudioContext)();
                 
                 // Create analyser
@@ -98,6 +99,8 @@ class MeditationAudioMixer {
                 
             } catch (error) {
                 console.error(`Error setting up Web Audio API for ${track}:`, error);
+                // Create fallback analyser
+                this.analysers[track] = null;
             }
         }
     }
@@ -113,7 +116,7 @@ class MeditationAudioMixer {
 
         try {
             if (audio.paused) {
-                // Resume audio context if suspended
+                // Resume individual audio context if suspended
                 if (this.audioContexts[trackName] && this.audioContexts[trackName].state === 'suspended') {
                     await this.audioContexts[trackName].resume();
                 }
@@ -138,7 +141,7 @@ class MeditationAudioMixer {
         
         for (const track of trackNames) {
             try {
-                // Resume audio context if suspended
+                // Resume individual audio context if suspended
                 if (this.audioContexts[track] && this.audioContexts[track].state === 'suspended') {
                     await this.audioContexts[track].resume();
                 }
@@ -217,42 +220,43 @@ class MeditationAudioMixer {
             });
 
             if (allData.length === 0) {
-                requestAnimationFrame(() => this.drawVisualizer());
-                return;
-            }
-
-            // Combine all frequency data
-            bufferLength = maxBufferLength;
-            dataArray = new Uint8Array(bufferLength);
-            
-            for (let i = 0; i < bufferLength; i++) {
-                let sum = 0;
-                let count = 0;
-                allData.forEach(trackData => {
-                    if (i < trackData.length) {
-                        sum += trackData[i];
-                        count++;
-                    }
-                });
-                dataArray[i] = count > 0 ? sum / count : 0;
+                // Fallback to default breathing pattern
+                avgAmplitude = 0.1;
+            } else {
+                // Combine all frequency data
+                bufferLength = maxBufferLength;
+                dataArray = new Uint8Array(bufferLength);
+                
+                for (let i = 0; i < bufferLength; i++) {
+                    let sum = 0;
+                    let count = 0;
+                    allData.forEach(trackData => {
+                        if (i < trackData.length) {
+                            sum += trackData[i];
+                            count++;
+                        }
+                    });
+                    dataArray[i] = count > 0 ? sum / count : 0;
+                }
+                // Calculate average amplitude from audio data
+                avgAmplitude = dataArray.reduce((sum, val) => sum + val, 0) / bufferLength / 255;
             }
         } else {
             // Single track visualization
             const analyser = this.analysers[this.currentVisualizerTrack];
             
             if (!analyser) {
-                requestAnimationFrame(() => this.drawVisualizer());
-                return;
+                // Fallback to default breathing pattern
+                avgAmplitude = 0.1;
+            } else {
+                bufferLength = analyser.frequencyBinCount;
+                dataArray = new Uint8Array(bufferLength);
+                analyser.getByteFrequencyData(dataArray);
+                // Calculate average amplitude from audio data
+                avgAmplitude = dataArray.reduce((sum, val) => sum + val, 0) / bufferLength / 255;
             }
-
-            bufferLength = analyser.frequencyBinCount;
-            dataArray = new Uint8Array(bufferLength);
-            analyser.getByteFrequencyData(dataArray);
         }
 
-        // Calculate average amplitude from audio data
-        avgAmplitude = dataArray.reduce((sum, val) => sum + val, 0) / bufferLength / 255;
-        
         // Smooth the amplitude changes
         if (!this.smoothedAmplitude) this.smoothedAmplitude = avgAmplitude;
         this.smoothedAmplitude = this.smoothedAmplitude * 0.8 + avgAmplitude * 0.2;
