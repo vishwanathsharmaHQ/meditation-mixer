@@ -8,7 +8,10 @@
 </head>
 <body>
     <div class="container">
-       
+        <header>
+            <h1>Meditation Audio Mixer</h1>
+            <p>3D Spatial Audio Experience</p>
+        </header>
 
         <main>
             <!-- Audio Controls Section -->
@@ -96,6 +99,51 @@
                                 <input type="range" class="volume-slider" min="0" max="100" value="70" data-audio="voiceAudio">
                                 <span class="volume-value">70%</span>
                             </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 3D Spatial Audio Control Section -->
+            <section class="spatial-control-section">
+                <h2>3D Spatial Audio Control</h2>
+                
+                <!-- Spatial Control Info -->
+                <div class="spatial-controls">
+                    <h3>Position Audio Sources</h3>
+                    <p style="color: #666; font-size: 0.9rem; margin-top: 5px;">Drag the colored dots to position sounds around you in 3D space</p>
+                    
+                    <!-- Reset and Preset Controls -->
+                    <div class="spatial-presets">
+                        <button id="resetPositions" class="preset-btn">Reset to Center</button>
+                        <button id="surroundPreset" class="preset-btn">Surround Setup</button>
+                        <button id="frontPreset" class="preset-btn">Front Stage</button>
+                    </div>
+                </div>
+
+                <!-- 3D Spatial Canvas -->
+                <div class="spatial-container">
+                    <canvas id="spatialCanvas" width="400" height="400"></canvas>
+                    <div class="spatial-legend">
+                        <div class="legend-item">
+                            <div class="legend-color" style="background: hsl(200, 70%, 60%);"></div>
+                            <span>Breath</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background: hsl(280, 70%, 60%);"></div>
+                            <span>Music</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background: hsl(30, 70%, 60%);"></div>
+                            <span>Percussion</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background: hsl(120, 70%, 60%);"></div>
+                            <span>Voice</span>
+                        </div>
+                        <div class="legend-item listener">
+                            <div class="legend-color" style="background: #fff; border: 2px solid #333;"></div>
+                            <span>You (Listener)</span>
                         </div>
                     </div>
                 </div>

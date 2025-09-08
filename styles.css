@@ -7,14 +7,15 @@
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: #000000;
     min-height: 100vh;
-    color: #333;
+    color: #ffffff;
     line-height: 1.6;
+    overflow-x: hidden;
 }
 
 .container {
-    max-width: 1200px;
+    max-width: 1400px;
     margin: 0 auto;
     padding: 20px;
 }
@@ -23,132 +24,143 @@ body {
 header {
     text-align: center;
     margin-bottom: 40px;
-    color: white;
+    color: #00ffff;
 }
 
 header h1 {
     font-size: 2.5rem;
     margin-bottom: 10px;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    text-shadow: 0 0 20px #00ffff;
+    font-weight: 300;
+    letter-spacing: 2px;
 }
 
 header p {
     font-size: 1.1rem;
-    opacity: 0.9;
+    opacity: 0.8;
+    color: #ffffff;
 }
 
-/* Main Layout */
+/* Main Grid Layout */
 main {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 40px;
+    grid-template-columns: 350px 1fr 350px;
+    gap: 30px;
     align-items: start;
+    min-height: 80vh;
+}
+
+/* Section Base Styles */
+.audio-controls,
+.spatial-control-section,
+.visualizer-section {
+    background: rgba(20, 20, 20, 0.9);
+    border-radius: 15px;
+    padding: 25px;
+    border: 1px solid rgba(0, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+}
+
+.audio-controls h2,
+.spatial-control-section h2,
+.visualizer-section h2 {
+    color: #00ffff;
+    margin-bottom: 25px;
+    font-size: 1.5rem;
+    text-align: center;
+    font-weight: 300;
+    text-shadow: 0 0 10px #00ffff;
 }
 
 /* Audio Controls Section */
 .audio-controls {
-    background: rgba(255, 255, 255, 0.95);
-    border-radius: 20px;
-    padding: 30px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-    backdrop-filter: blur(10px);
-}
-
-.audio-controls h2 {
-    color: #4a5568;
-    margin-bottom: 25px;
-    font-size: 1.8rem;
-    text-align: center;
+    grid-column: 1;
 }
 
 /* Master Controls */
 .master-controls {
     display: flex;
-    gap: 15px;
+    gap: 10px;
     justify-content: center;
-    margin-bottom: 30px;
+    margin-bottom: 25px;
 }
 
 .master-btn {
-    background: linear-gradient(135deg, #667eea, #764ba2);
+    background: linear-gradient(135deg, #ff0080, #8000ff);
     color: white;
     border: none;
-    padding: 12px 24px;
-    border-radius: 25px;
-    font-size: 1rem;
-    font-weight: 600;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 500;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    box-shadow: 0 0 15px rgba(255, 0, 128, 0.3);
 }
 
 .master-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
-}
-
-.master-btn:active {
-    transform: translateY(0);
+    box-shadow: 0 0 25px rgba(255, 0, 128, 0.5);
 }
 
 /* Track Controls */
 .tracks-container {
     display: grid;
-    gap: 20px;
+    gap: 15px;
 }
 
 .track-control {
-    background: rgba(255, 255, 255, 0.8);
-    border-radius: 15px;
-    padding: 20px;
-    border: 2px solid transparent;
+    background: rgba(40, 40, 40, 0.5);
+    border-radius: 10px;
+    padding: 15px;
+    border: 1px solid rgba(0, 255, 255, 0.1);
     transition: all 0.3s ease;
 }
 
 .track-control:hover {
-    border-color: rgba(102, 126, 234, 0.3);
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    border-color: rgba(0, 255, 255, 0.4);
+    background: rgba(40, 40, 40, 0.8);
 }
 
 .track-control h3 {
-    color: #4a5568;
-    margin-bottom: 15px;
-    font-size: 1.3rem;
+    color: #ffffff;
+    margin-bottom: 10px;
+    font-size: 1.1rem;
     text-align: center;
+    font-weight: 400;
 }
 
 .control-group {
     display: flex;
     align-items: center;
-    gap: 20px;
+    gap: 15px;
 }
 
 /* Play/Pause Buttons */
 .play-pause-btn {
-    background: linear-gradient(135deg, #48bb78, #38a169);
-    color: white;
+    background: linear-gradient(135deg, #00ff80, #00ffff);
+    color: #000000;
     border: none;
-    width: 50px;
-    height: 50px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
-    font-size: 1.2rem;
+    font-size: 1rem;
     cursor: pointer;
     transition: all 0.3s ease;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 4px 15px rgba(72, 187, 120, 0.3);
+    box-shadow: 0 0 15px rgba(0, 255, 128, 0.4);
 }
 
 .play-pause-btn:hover {
     transform: scale(1.1);
-    box-shadow: 0 6px 20px rgba(72, 187, 120, 0.4);
+    box-shadow: 0 0 25px rgba(0, 255, 128, 0.6);
 }
 
 .play-pause-btn.playing {
-    background: linear-gradient(135deg, #ed8936, #dd6b20);
-    box-shadow: 0 4px 15px rgba(237, 137, 54, 0.3);
+    background: linear-gradient(135deg, #ff8000, #ff0080);
+    box-shadow: 0 0 15px rgba(255, 128, 0, 0.4);
 }
 
 /* Volume Controls */
@@ -156,20 +168,21 @@ main {
     flex: 1;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
 }
 
 .volume-control label {
-    font-weight: 600;
-    color: #4a5568;
-    min-width: 60px;
+    font-weight: 400;
+    color: #ffffff;
+    min-width: 50px;
+    font-size: 0.9rem;
 }
 
 .volume-slider {
     flex: 1;
-    height: 6px;
-    border-radius: 3px;
-    background: #e2e8f0;
+    height: 4px;
+    border-radius: 2px;
+    background: rgba(255, 255, 255, 0.2);
     outline: none;
     cursor: pointer;
     -webkit-appearance: none;
@@ -177,93 +190,155 @@ main {
 
 .volume-slider::-webkit-slider-thumb {
     -webkit-appearance: none;
-    width: 20px;
-    height: 20px;
+    width: 16px;
+    height: 16px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #667eea, #764ba2);
+    background: linear-gradient(135deg, #00ffff, #ff0080);
     cursor: pointer;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
     transition: all 0.3s ease;
 }
 
 .volume-slider::-webkit-slider-thumb:hover {
     transform: scale(1.2);
-}
-
-.volume-slider::-moz-range-thumb {
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #667eea, #764ba2);
-    cursor: pointer;
-    border: none;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.8);
 }
 
 .volume-value {
-    font-weight: 600;
-    color: #4a5568;
-    min-width: 40px;
+    font-weight: 500;
+    color: #00ffff;
+    min-width: 35px;
     text-align: right;
+    font-size: 0.9rem;
+}
+
+/* Spatial Control Section */
+.spatial-control-section {
+    grid-column: 2;
+}
+
+.spatial-controls {
+    margin-bottom: 20px;
+}
+
+.spatial-controls h3 {
+    color: #ffffff;
+    margin-bottom: 10px;
+    font-size: 1.1rem;
+    font-weight: 400;
+}
+
+.spatial-controls p {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.9rem;
+    margin-bottom: 15px;
+}
+
+.spatial-presets {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 15px;
+}
+
+.preset-btn {
+    background: linear-gradient(135deg, #8000ff, #00ffff);
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 10px rgba(128, 0, 255, 0.3);
+}
+
+.preset-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 0 20px rgba(128, 0, 255, 0.5);
+}
+
+/* Spatial Canvas Container */
+.spatial-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: rgba(10, 10, 10, 0.9);
+    border-radius: 15px;
+    padding: 20px;
+    margin: 0 auto;
+    border: 1px solid rgba(0, 255, 255, 0.3);
+}
+
+#spatialCanvas {
+    border-radius: 10px;
+    background: transparent;
+    cursor: pointer;
+    border: 1px solid rgba(0, 255, 255, 0.2);
+    transition: border-color 0.3s ease;
+}
+
+#spatialCanvas:hover {
+    border-color: rgba(0, 255, 255, 0.5);
+}
+
+/* Spatial Legend */
+.spatial-legend {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 15px;
+    padding: 12px;
+    background: rgba(20, 20, 20, 0.8);
+    border-radius: 10px;
+    width: 100%;
+    border: 1px solid rgba(0, 255, 255, 0.1);
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: white;
+    font-size: 0.8rem;
+    font-weight: 400;
+}
+
+.legend-item.listener {
+    font-weight: 600;
+    color: #00ffff;
+}
+
+.legend-color {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    box-shadow: 0 0 8px currentColor;
 }
 
 /* Visualizer Section */
 .visualizer-section {
-    background: rgba(255, 255, 255, 0.95);
-    border-radius: 20px;
-    padding: 30px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-    backdrop-filter: blur(10px);
-    text-align: center;
-}
-
-.visualizer-section h2 {
-    color: #4a5568;
-    margin-bottom: 25px;
-    font-size: 1.8rem;
+    grid-column: 3;
 }
 
 .visualizer-controls {
-    margin-bottom: 30px;
+    margin-bottom: 20px;
 }
 
 .visualizer-controls h3 {
-    color: #4a5568;
-    margin-bottom: 15px;
-    font-size: 1.2rem;
+    color: #ffffff;
+    margin-bottom: 10px;
+    font-size: 1.1rem;
+    font-weight: 400;
 }
 
-.radio-group {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    flex-wrap: wrap;
-}
-
-.radio-label {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    cursor: pointer;
-    padding: 8px 16px;
-    border-radius: 20px;
-    transition: all 0.3s ease;
-    background: rgba(255, 255, 255, 0.5);
-    border: 2px solid transparent;
-}
-
-.radio-label:hover {
-    background: rgba(102, 126, 234, 0.1);
-    border-color: rgba(102, 126, 234, 0.3);
-}
-
-.radio-label input[type="radio"] {
-    accent-color: #667eea;
-}
-
-.radio-label input[type="radio"]:checked + span {
-    color: #667eea;
-    font-weight: 600;
+.visualizer-controls p {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.9rem;
 }
 
 /* Visualizer Canvas */
@@ -271,25 +346,49 @@ main {
     display: flex;
     justify-content: center;
     align-items: center;
-    background: linear-gradient(135deg, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.9));
-    border-radius: 20px;
-    padding: 30px;
+    background: rgba(10, 10, 10, 0.9);
+    border-radius: 15px;
+    padding: 20px;
     margin: 0 auto;
-    width: 480px;
-    height: 480px;
-    box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(0, 255, 255, 0.3);
 }
 
 #visualizer {
-    border-radius: 15px;
+    border-radius: 10px;
     background: transparent;
 }
 
 /* Responsive Design */
+@media (max-width: 1200px) {
+    main {
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+    }
+    
+    .spatial-control-section {
+        grid-column: 1 / -1;
+        order: -1;
+    }
+    
+    .audio-controls {
+        grid-column: 1;
+    }
+    
+    .visualizer-section {
+        grid-column: 2;
+    }
+}
+
 @media (max-width: 768px) {
     main {
         grid-template-columns: 1fr;
-        gap: 30px;
+        gap: 20px;
+    }
+    
+    .spatial-control-section,
+    .audio-controls,
+    .visualizer-section {
+        grid-column: 1;
     }
     
     header h1 {
@@ -298,26 +397,33 @@ main {
     
     .control-group {
         flex-direction: column;
-        gap: 15px;
+        gap: 10px;
     }
     
     .volume-control {
         width: 100%;
     }
     
-    .radio-group {
-        flex-direction: column;
-        align-items: center;
-    }
-    
+    .spatial-container,
     .visualizer-container {
-        width: 320px;
-        height: 320px;
+        padding: 15px;
     }
     
+    #spatialCanvas,
     #visualizer {
         width: 280px;
         height: 280px;
+    }
+    
+    .spatial-presets {
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+    }
+    
+    .spatial-legend {
+        flex-direction: column;
+        gap: 8px;
     }
 }
 
@@ -327,22 +433,50 @@ main {
     }
     
     .audio-controls,
-    .visualizer-section {
-        padding: 20px;
+    .visualizer-section,
+    .spatial-control-section {
+        padding: 15px;
     }
     
     .master-controls {
         flex-direction: column;
         align-items: center;
+        gap: 8px;
     }
     
-    .visualizer-container {
-        width: 280px;
-        height: 280px;
-    }
-    
+    #spatialCanvas,
     #visualizer {
         width: 240px;
         height: 240px;
     }
+    
+    .preset-btn {
+        padding: 5px 10px;
+        font-size: 0.75rem;
+    }
+}
+
+/* Neon glow effects */
+.audio-controls:hover,
+.spatial-control-section:hover,
+.visualizer-section:hover {
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.1);
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(20, 20, 20, 0.5);
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #00ffff, #ff0080);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, #ff0080, #8000ff);
 }
