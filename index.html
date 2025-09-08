@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meditation Audio Mixer</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+       
+
+        <main>
+            <!-- Audio Controls Section -->
+            <section class="audio-controls">
+                <h2>Audio Tracks</h2>
+                
+                <!-- Master Controls -->
+                <div class="master-controls">
+                    <button id="playAll" class="master-btn">Play All</button>
+                    <button id="pauseAll" class="master-btn">Pause All</button>
+                </div>
+
+                <!-- Individual Track Controls -->
+                <div class="tracks-container">
+                    <!-- Breath Track -->
+                    <div class="track-control" data-track="breath">
+                        <h3>Breath</h3>
+                        <audio id="breathAudio" preload="auto">
+                            <source src="FOCUS breath r1.mp3" type="audio/mpeg">
+                        </audio>
+                        <div class="control-group">
+                            <button class="play-pause-btn" data-audio="breathAudio">
+                                <span class="play-icon">▶</span>
+                                <span class="pause-icon" style="display: none;">⏸</span>
+                            </button>
+                            <div class="volume-control">
+                                <label>Volume</label>
+                                <input type="range" class="volume-slider" min="0" max="100" value="70" data-audio="breathAudio">
+                                <span class="volume-value">70%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Music Track -->
+                    <div class="track-control" data-track="music">
+                        <h3>Music</h3>
+                        <audio id="musicAudio" preload="auto">
+                            <source src="FOCUS music r1.mp3" type="audio/mpeg">
+                        </audio>
+                        <div class="control-group">
+                            <button class="play-pause-btn" data-audio="musicAudio">
+                                <span class="play-icon">▶</span>
+                                <span class="pause-icon" style="display: none;">⏸</span>
+                            </button>
+                            <div class="volume-control">
+                                <label>Volume</label>
+                                <input type="range" class="volume-slider" min="0" max="100" value="70" data-audio="musicAudio">
+                                <span class="volume-value">70%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Percussion Track -->
+                    <div class="track-control" data-track="percussion">
+                        <h3>Percussion</h3>
+                        <audio id="percussionAudio" preload="auto">
+                            <source src="FOCUS percussion r1.mp3" type="audio/mpeg">
+                        </audio>
+                        <div class="control-group">
+                            <button class="play-pause-btn" data-audio="percussionAudio">
+                                <span class="play-icon">▶</span>
+                                <span class="pause-icon" style="display: none;">⏸</span>
+                            </button>
+                            <div class="volume-control">
+                                <label>Volume</label>
+                                <input type="range" class="volume-slider" min="0" max="100" value="70" data-audio="percussionAudio">
+                                <span class="volume-value">70%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Voice Track -->
+                    <div class="track-control" data-track="voice">
+                        <h3>Voice</h3>
+                        <audio id="voiceAudio" preload="auto">
+                            <source src="FOCUS voice r1.mp3" type="audio/mpeg">
+                        </audio>
+                        <div class="control-group">
+                            <button class="play-pause-btn" data-audio="voiceAudio">
+                                <span class="play-icon">▶</span>
+                                <span class="pause-icon" style="display: none;">⏸</span>
+                            </button>
+                            <div class="volume-control">
+                                <label>Volume</label>
+                                <input type="range" class="volume-slider" min="0" max="100" value="70" data-audio="voiceAudio">
+                                <span class="volume-value">70%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Visualizer Section -->
+            <section class="visualizer-section">
+                <h2>Audio Visualizer</h2>
+                
+                <!-- Visualizer Track Selection -->
+                <div class="visualizer-controls">
+                    <h3>Visualize Track:</h3>
+                    <div class="radio-group">
+                        <label class="radio-label">
+                            <input type="radio" name="visualizerTrack" value="breath" checked>
+                            <span>Breath</span>
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="visualizerTrack" value="music">
+                            <span>Music</span>
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="visualizerTrack" value="percussion">
+                            <span>Percussion</span>
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="visualizerTrack" value="voice">
+                            <span>Voice</span>
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="visualizerTrack" value="all">
+                            <span>All Tracks</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Visualizer Canvas -->
+                <div class="visualizer-container">
+                    <canvas id="visualizer" width="400" height="400"></canvas>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
