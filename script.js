@@ -197,6 +197,7 @@ class MeditationAudioMixer {
 
         let dataArray;
         let bufferLength;
+        let avgAmplitude = 0;
 
         if (this.currentVisualizerTrack === 'all') {
             // Combine data from all tracks
@@ -249,91 +250,95 @@ class MeditationAudioMixer {
             analyser.getByteFrequencyData(dataArray);
         }
 
+        // Calculate average amplitude from audio data
+        avgAmplitude = dataArray.reduce((sum, val) => sum + val, 0) / bufferLength / 255;
+        
+        // Smooth the amplitude changes
+        if (!this.smoothedAmplitude) this.smoothedAmplitude = avgAmplitude;
+        this.smoothedAmplitude = this.smoothedAmplitude * 0.8 + avgAmplitude * 0.2;
+
         const canvas = this.canvas;
         const ctx = this.canvasContext;
         const centerX = canvas.width / 2;
         const centerY = canvas.height / 2;
-        const radius = Math.min(centerX, centerY) - 20;
 
         // Clear canvas
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        // Draw background circle
-        ctx.beginPath();
-        ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
-        ctx.strokeStyle = 'rgba(102, 126, 234, 0.2)';
-        ctx.lineWidth = 2;
-        ctx.stroke();
+        // Use audio amplitude to drive the breathing pattern
+        const breathProgress = Math.min(this.smoothedAmplitude * 2, 1); // Scale amplitude to 0-1
+        const easedProgress = this.easeInOutSine(breathProgress);
 
-        // Draw frequency bars in circular pattern
-        const barCount = 64; // Use fewer bars for cleaner look
-        const angleStep = (2 * Math.PI) / barCount;
-        
-        // Find the maximum amplitude for normalization
-        let maxAmplitude = 0;
-        for (let i = 0; i < Math.min(barCount, bufferLength); i++) {
-            const dataIndex = Math.floor((i / barCount) * bufferLength);
-            maxAmplitude = Math.max(maxAmplitude, dataArray[dataIndex]);
-        }
-        
-        // Ensure we have some minimum activity for visualization
-        maxAmplitude = Math.max(maxAmplitude, 30);
-        
-        for (let i = 0; i < barCount; i++) {
-            // Use a logarithmic distribution to better represent frequency spectrum
-            const logIndex = Math.floor(Math.pow(i / barCount, 1.5) * bufferLength);
-            const dataIndex = Math.min(logIndex, bufferLength - 1);
-            
-            let amplitude = dataArray[dataIndex] / maxAmplitude;
-            
-            // Add some base activity and smooth the amplitude
-            amplitude = Math.max(amplitude, 0.1) * 0.8 + 0.2;
-            amplitude = Math.min(amplitude, 1);
-            
-            const angle = i * angleStep - Math.PI / 2; // Start from top
-            const barHeight = amplitude * (radius * 0.4);
-            
-            // Calculate positions
-            const innerRadius = radius * 0.6;
-            const outerRadius = innerRadius + barHeight;
-            
-            const x1 = centerX + Math.cos(angle) * innerRadius;
-            const y1 = centerY + Math.sin(angle) * innerRadius;
-            const x2 = centerX + Math.cos(angle) * outerRadius;
-            const y2 = centerY + Math.sin(angle) * outerRadius;
+        // Grid configuration
+        const gridSize = 15; // 15x15 grid
+        const dotSize = 12;
+        const spacing = 20;
+        const totalWidth = (gridSize - 1) * spacing;
+        const totalHeight = (gridSize - 1) * spacing;
+        const startX = centerX - totalWidth / 2;
+        const startY = centerY - totalHeight / 2;
 
-            // Color based on amplitude and track with more variation
-            const hue = this.getTrackHue(this.currentVisualizerTrack);
-            const saturation = 60 + (amplitude * 40);
-            const lightness = 40 + (amplitude * 40);
-            
-            ctx.beginPath();
-            ctx.moveTo(x1, y1);
-            ctx.lineTo(x2, y2);
-            ctx.strokeStyle = `hsl(${hue}, ${saturation}%, ${lightness}%)`;
-            ctx.lineWidth = 4;
-            ctx.lineCap = 'round';
-            ctx.stroke();
-        }
+        // Calculate how many dots to fill based on breathing progress
+        const totalDots = gridSize * gridSize;
+        const centerDot = Math.floor(gridSize / 2);
+        const maxRadius = Math.sqrt(2 * Math.pow(centerDot, 2));
+        const currentRadius = easedProgress * maxRadius;
 
-        // Draw center circle with pulsing effect
-        const avgAmplitude = dataArray.reduce((sum, val) => sum + val, 0) / bufferLength / 255;
-        const pulseRadius = 20 + (avgAmplitude * 15);
-        
-        ctx.beginPath();
-        ctx.arc(centerX, centerY, pulseRadius, 0, 2 * Math.PI);
+        // Get track color
         const hue = this.getTrackHue(this.currentVisualizerTrack);
-        ctx.fillStyle = `hsla(${hue}, 70%, 60%, ${0.3 + avgAmplitude * 0.4})`;
-        ctx.fill();
 
-        // Draw track name in center
-        ctx.fillStyle = `hsl(${hue}, 70%, 40%)`;
-        ctx.font = 'bold 14px Arial';
+        // Draw squares in grid pattern
+        for (let row = 0; row < gridSize; row++) {
+            for (let col = 0; col < gridSize; col++) {
+                const x = startX + col * spacing - dotSize / 2;
+                const y = startY + row * spacing - dotSize / 2;
+
+                // Calculate distance from center
+                const distanceFromCenter = Math.sqrt(
+                    Math.pow(col - centerDot, 2) + Math.pow(row - centerDot, 2)
+                );
+
+                // Determine if this square should be filled
+                const shouldFill = distanceFromCenter <= currentRadius;
+
+                if (shouldFill) {
+                    // Filled square with breathing color
+                    const intensity = 1 - (distanceFromCenter / currentRadius) * 0.3;
+                    ctx.fillStyle = `hsla(${hue}, 70%, ${50 + intensity * 30}%, ${0.8 + intensity * 0.2})`;
+                    ctx.fillRect(x, y, dotSize, dotSize);
+                } else {
+                    // Empty square (outline only)
+                    ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+                    ctx.lineWidth = 1;
+                    ctx.strokeRect(x, y, dotSize, dotSize);
+                }
+            }
+        }
+
+        // Draw breathing instruction text based on amplitude
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+        ctx.font = 'bold 16px Arial';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        ctx.fillText(this.currentVisualizerTrack.toUpperCase(), centerX, centerY);
+        
+        const instructionText = breathProgress > 0.3 ? 'BREATHE IN' : 'BREATHE OUT';
+        ctx.fillText(instructionText, centerX, centerY + totalHeight / 2 + 40);
+        
+        // Show amplitude level
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
+        ctx.font = '12px Arial';
+        ctx.fillText(`Audio Level: ${Math.round(avgAmplitude * 100)}%`, centerX, centerY + totalHeight / 2 + 20);
+
+        // Draw track name
+        ctx.fillStyle = `hsl(${hue}, 70%, 70%)`;
+        ctx.font = 'bold 12px Arial';
+        ctx.fillText(this.currentVisualizerTrack.toUpperCase(), centerX, centerY + totalHeight / 2 + 60);
 
         requestAnimationFrame(() => this.drawVisualizer());
+    }
+
+    easeInOutSine(t) {
+        return -(Math.cos(Math.PI * t) - 1) / 2;
     }
 
     getTrackHue(trackName) {
